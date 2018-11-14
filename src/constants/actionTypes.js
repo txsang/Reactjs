@@ -1,14 +1,14 @@
 // demo export
 
-//user page
+// user page
 
 export const SET_CURRENT_USER = 'SET_CURRENT_USER'
 
-//another page
+// another page
 
 export const ANOTHER_ACTIONS = 'ANOTHER_ACTIONS'
 
-//Message
+// Message
 
 export const MESSAGE_ERROR = 'MESSAGE_ERROR'
 export const MESSAGE_SUCCESS = 'MESSAGE_SUCCESS'

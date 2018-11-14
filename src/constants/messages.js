@@ -1,3 +1,3 @@
-const msg = {};
+const msg = {}
 
-export { msg };
+export { msg }

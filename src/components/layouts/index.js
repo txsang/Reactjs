@@ -1,3 +1,3 @@
-import MainLayout from './MainLayout.jsx';
+import MainLayout from './MainLayout.jsx'
 
 export default MainLayout

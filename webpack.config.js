@@ -1,21 +1,19 @@
-const webpack = require('webpack');
-const path = require('path');
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const dotenv = require('dotenv').config().parsed;
+const webpack = require('webpack')
+const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const dotenv = require('dotenv').config().parsed
 
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const TransferWebpackPlugin = require('transfer-webpack-plugin');
-const ManifestPlugin = require('webpack-manifest-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const ManifestPlugin = require('webpack-manifest-plugin')
 
-const config = Object.assign(require('./src/constants/config'), dotenv);
+const config = Object.assign(require('./src/constants/config'), dotenv)
 const {
   NODE_ENV,
   PORT,
   API_URL
-} = config;
+} = config
 
-const sourcePath = path.join(__dirname, './');
-const staticsPath = path.join(__dirname, './static');
+const sourcePath = path.join(__dirname, './')
 
 let _module = {
   rules: [
@@ -28,13 +26,13 @@ let _module = {
       loader: 'babel-loader',
       query: {
         presets: [['es2015', {
-          "modules": false
+          'modules': false
         }], 'react', 'stage-2'],
         plugins: ['transform-runtime', 'transform-decorators-legacy']
       }
     }, {
       test: /\.less$/,
-      //use: ['css-loader', 'less-loader']
+      // use: ['css-loader', 'less-loader']
       use: ExtractTextPlugin.extract({
         use: [
           'css-loader',
@@ -89,19 +87,16 @@ let _module = {
     }
   ],
   noParse: [/jszip.js$/]
-};
-
-
+}
 
 module.exports = function (env) {
-  const nodeEnv = env && env.prod ? 'production' : 'development';
-  const isProd = NODE_ENV === 'production';
+  const isProd = NODE_ENV === 'production'
 
   const envars = {
     NODE_ENV: JSON.stringify(NODE_ENV),
     API_URL: JSON.stringify(API_URL),
     PORT: JSON.stringify(PORT)
-  };
+  }
 
   const plugins = [
     new webpack.EnvironmentPlugin(envars),
@@ -110,7 +105,7 @@ module.exports = function (env) {
     }),
     new ExtractTextPlugin({ filename: (isProd ? '[hash]-docs.css' : 'docs.css'), allChunks: true }),
     new webpack.NamedModulesPlugin()
-  ];
+  ]
 
   if (isProd) {
     plugins.push(
@@ -136,7 +131,7 @@ module.exports = function (env) {
           comments: false
         }
       })
-    );
+    )
   } else {
     plugins.push(
       new webpack.HotModuleReplacementPlugin(),
@@ -146,12 +141,12 @@ module.exports = function (env) {
           context: __dirname
         }
       })
-    );
+    )
   }
 
   let appEntry = {
     vendor: [
-      'babel-polyfill',
+      'babel-polyfill'
     ],
     app: [
       'jquery',
@@ -160,12 +155,12 @@ module.exports = function (env) {
       'assets/style/main.scss',
       'react-toastify/dist/ReactToastify.css'
     ]
-  };
+  }
 
   let appResolver = {
     extensions: ['.webpack-loader.js', '.web-loader.js', '.loader.js', '.js', '.jsx'],
     alias: {
-      'jquery': path.resolve(__dirname, "node_modules") + "/jquery/src/jquery.js",
+      'jquery': path.resolve(__dirname, 'node_modules') + '/jquery/src/jquery.js',
       'base': path.resolve(__dirname, './src'),
       'src': path.resolve(__dirname, './src'),
       'assets': path.resolve(__dirname, './src/assets'),
@@ -180,7 +175,7 @@ module.exports = function (env) {
       'node_modules',
       sourcePath
     ]
-  };
+  }
 
   let devServerConfig = {
     contentBase: path.resolve(__dirname, './src'),
@@ -205,7 +200,7 @@ module.exports = function (env) {
         green: '\u001b[32m'
       }
     }
-  };
+  }
 
   let commonConfig = {
     devtool: isProd ? 'source-map' : 'eval-source-map',
@@ -239,15 +234,15 @@ module.exports = function (env) {
     },
     externals: [
       {
-        "./cptable": "var cptable"
+        './cptable': 'var cptable'
       }
     ]
-  };
+  }
 
   let clientAppEntry = [
     ...appEntry.app
-  ];
-  clientAppEntry.unshift('./src/index.js');
+  ]
+  clientAppEntry.unshift('./src/index.js')
 
   let clientConfig = {
     ...commonConfig,
@@ -275,8 +270,7 @@ module.exports = function (env) {
       new ManifestPlugin()
     ],
     devServer: devServerConfig
-  };
-
+  }
 
   if (!isProd) {
     clientConfig = {
@@ -291,4 +285,4 @@ module.exports = function (env) {
   }
 
   return clientConfig
-};
+}

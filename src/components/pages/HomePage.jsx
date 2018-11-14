@@ -1,56 +1,53 @@
-import React, { Component } from 'react';
-import MainLayout from 'components/layouts';
-import { instanceOf } from 'prop-types';
-import { withCookies, Cookies } from 'react-cookie';
-import { connect } from 'react-redux';
-import * as actions from 'actions/user';
-import {Link} from 'react-router-dom';
+import React, { Component } from 'react'
+import MainLayout from 'components/layouts'
+import propTypes from 'prop-types'
+import { withCookies, Cookies } from 'react-cookie'
+import { connect } from 'react-redux'
+import * as actions from 'actions/user'
+import { Link } from 'react-router-dom'
 
 class HomePage extends Component {
-  static propTypes = {
-    cookies: instanceOf(Cookies).isRequired
-  };
-  constructor(props, context) {
-    super(props, context);
-    const { cookies } = props;
+  constructor (props, context) {
+    super(props, context)
+    const { cookies } = props
     this.state = {
       user: cookies.get('userInfo') || 'Ben'
     }
   }
 
-  componentWillMount() {
-    const { cookies } = this.props;
-    cookies.set('userInfo', 'Xuân Sang', { path: '/' });
+  componentWillMount () {
+    const { cookies } = this.props
+    cookies.set('userInfo', 'Xuân Sang', { path: '/' })
   }
 
-  componentDidMount() {
-    this.getUserInfo();
+  componentDidMount () {
+    this.getUserInfo()
   }
 
-  getUserInfo() {
+  getUserInfo () {
     this.props.dispatch(actions.getInforUser(1, this.state.user)).then(respone => {
       console.log(respone)
-      this.props.dispatch(actions.setCurrentUser(respone));
+      this.props.dispatch(actions.setCurrentUser(respone))
     })
   }
 
-  cancelAPI() {
+  cancelAPI () {
     this.props.dispatch(actions.cancelUserAPI())
   }
 
-  callAPI() {
+  callAPI () {
     this.props.dispatch(actions.getUser()).then(respone => {
-      console.log(respone);
-    }).catch( err => {
+      console.log(respone)
+    }).catch(err => {
       console.log(err)
-    });;
+    })
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     this.props.dispatch(actions.cancelUserAPI())
   }
 
-  render() {
+  render () {
     return (
       <MainLayout>
         <div>
@@ -60,7 +57,7 @@ class HomePage extends Component {
           <Link to='/home'>go to another page</Link>
         </div>
       </MainLayout>
-    );
+    )
   }
 }
 
@@ -70,9 +67,12 @@ const bindStateToProps = state => {
   }
 }
 
-
 const bindDispatchToProps = dispatch => ({
   dispatch
 })
+
+HomePage.propTypes = {
+  cookies: propTypes.instanceOf(Cookies).isRequired
+}
 
 export default connect(bindStateToProps, bindDispatchToProps)(withCookies(HomePage))

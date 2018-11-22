@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Route, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import ConnectedSwitch from './connectedSwitch.jsx'
+import ConnectedSwitch from './ConnectedSwitch.jsx'
 
 const RenderRoutes = ({ routes, auth }) => {
   if (!routes) {
